@@ -1,4 +1,4 @@
-package it.prova.gestionepermessi.repository.utente;
+package it.prova.gestionepermessi.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
