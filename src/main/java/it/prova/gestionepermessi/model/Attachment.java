@@ -27,19 +27,15 @@ public class Attachment {
 	private String contentType;
 
 	@Lob
-	@Column(name = "file")
-	private byte[] file;
-	
-	@OneToOne
-	@JoinColumn(name="richiestapermesso_id")
-	private RichiestaPermesso richiestaPermesso;
+	@Column(name = "payload")
+	private byte[] payload;
 	
 
-	public Attachment(String nomeFile, String contentType, byte[] file) {
+	public Attachment(String nomeFile, String contentType, byte[] payload) {
 		super();
 		this.nomeFile = nomeFile;
 		this.contentType = contentType;
-		this.file = file;
+		this.payload = payload;
 	}
 
 	public Long getId() {
@@ -66,12 +62,12 @@ public class Attachment {
 		this.contentType = contentType;
 	}
 
-	public byte[] getFile() {
-		return file;
+	public byte[] getpayload() {
+		return payload;
 	}
 
-	public void setFile(byte[] file) {
-		this.file = file;
+	public void setpayload(byte[] payload) {
+		this.payload = payload;
 	}
 
 }

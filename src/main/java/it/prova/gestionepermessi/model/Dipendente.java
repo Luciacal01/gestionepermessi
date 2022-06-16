@@ -55,7 +55,7 @@ public class Dipendente {
 	@JoinColumn(name="utente_id", referencedColumnName = "id")
 	private Utente utente;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "richiestapermesso")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dipendente")
 	private Set<RichiestaPermesso> richiestePermessi = new HashSet<RichiestaPermesso>(0);
 
 	public Dipendente(String nome, String cognome, String codiceFiscale, String email, Date dataNascita, Date dataAssunzione,

@@ -43,12 +43,8 @@ public class RichiestaPermesso {
 	private String note;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "dipendente_id")
+	@JoinColumn(name = "dipendente_id", nullable = false)
 	private Dipendente dipendente;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "messaggio_id", referencedColumnName = "id")
-	private Messaggio messaggio;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "attachment_id", referencedColumnName = "id")
@@ -127,14 +123,6 @@ public class RichiestaPermesso {
 
 	public void setDipendente(Dipendente dipendente) {
 		this.dipendente = dipendente;
-	}
-
-	public Messaggio getMessaggio() {
-		return messaggio;
-	}
-
-	public void setMessaggio(Messaggio messaggio) {
-		this.messaggio = messaggio;
 	}
 
 	public Attachment getAttachment() {

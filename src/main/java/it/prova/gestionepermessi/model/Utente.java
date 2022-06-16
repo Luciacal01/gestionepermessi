@@ -30,10 +30,6 @@ public class Utente {
 	private String username;
 	@Column(name = "password")
 	private String password;
-	@Column(name = "nome")
-	private String nome;
-	@Column(name = "cognome")
-	private String cognome;
 	@Column(name = "dateCreated")
 	private Date dateCreated;
 
@@ -61,18 +57,14 @@ public class Utente {
 	public Utente(String username, String password, String nome, String cognome, Date dateCreated) {
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 	}
 
-	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated,
+	public Utente(Long id, String username, String password, Date dateCreated,
 			StatoUtente stato) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 	}
@@ -113,22 +105,6 @@ public class Utente {
 		this.ruoli = ruoli;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCognome() {
-		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
-	}
-
 	public Date getDateCreated() {
 		return dateCreated;
 	}
@@ -152,6 +128,22 @@ public class Utente {
 		}
 		return false;
 	}
+	
+	public boolean isBO() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_BO_USER))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isDipendente() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_DIPENDENTE_USER))
+				return true;
+		}
+		return false;
+	}
 
 	public boolean isAttivo() {
 		return this.stato != null && this.stato.equals(StatoUtente.ATTIVO);
@@ -160,4 +152,14 @@ public class Utente {
 	public boolean isDisabilitato() {
 		return this.stato != null && this.stato.equals(StatoUtente.DISABILITATO);
 	}
+
+	public Dipendente getDipendente() {
+		return dipendente;
+	}
+
+	public void setDipendente(Dipendente dipendente) {
+		this.dipendente = dipendente;
+	}
+	
+	
 }
