@@ -9,5 +9,6 @@ public class GestionepermessiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GestionepermessiApplication.class, args);
 	}
+	
 
 }
