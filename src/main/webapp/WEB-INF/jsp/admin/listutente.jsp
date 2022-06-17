@@ -51,7 +51,7 @@
 										
 										<td>
 											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/admin/showutente/${utenteItem.id}">Visualizza</a>
-											<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/admin/editutente/${utenteItem.id }">Edit</a>
+											<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/admin/editUtente/${utenteItem.id}">Edit</a>
 											<a id="changeStatoLink_#_${utenteItem.id }" class="btn btn-outline-${utenteItem.isAttivo()?'danger':'success'} btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${utenteItem.isAttivo()?'Disabilita':'Abilita'}</a>
 											<a id="resetPasswordLink_#_${utenteItem.id}" class="btn btn-outline-success btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModalPassword"  >Reset Password</a>
 										</td>
@@ -84,7 +84,7 @@
 	            <div class="modal-body">
 	                Continuare con l'operazione?
 	            </div>
-	            <form method="post" action="${pageContext.request.contextPath}/utente/cambiaStato" >
+	            <form method="post" action="${pageContext.request.contextPath}/admin/cambiaStato" >
 		            <div class="modal-footer">
 		            	<input type="hidden" name="idUtenteForChangingStato" id="idUtenteForChangingStato">
 		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
@@ -117,7 +117,7 @@
 	            <div class="modal-body">
 	                Continuare con l'operazione?
 	            </div>
-	            <form method="post" action="${pageContext.request.contextPath}/utente/resetPassword" >
+	            <form method="post" action="${pageContext.request.contextPath}/admin/resetPassword" >
 		            <div class="modal-footer">
 		            	<input type="hidden" name="idUtenteForResetpassword" id="idUtenteForResetpassword">
 		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>

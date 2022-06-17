@@ -18,6 +18,8 @@ public interface UtenteService {
 	public Utente caricaSingoloUtenteConRuoli(Long id);
 
 	public void aggiorna(Utente utenteInstance);
+	
+	public void aggiorna2(Utente utenteInstance);
 
 	public void inserisciNuovo(Utente utenteInstance);
 
