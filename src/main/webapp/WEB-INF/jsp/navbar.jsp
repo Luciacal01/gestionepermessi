@@ -73,7 +73,7 @@
       </div>
       <sec:authorize access="isAuthenticated()">
 	      <div class="col-md-3 text-end">
-	       
+	       	<p class="navbar-text">Utente: ${userInfo.username } (${userInfo.getDipendenteDTO().nome } ${userInfo.getDipendenteDTO().cognome } )
 	      </div>
       </sec:authorize>
       

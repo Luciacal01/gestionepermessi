@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 
 import org.apache.commons.lang3.StringUtils;
@@ -81,20 +82,33 @@ public class UtenteServiceImpl implements UtenteService {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
+			// faccio fetch del dipendente e ruoli a prescindere
+			root.fetch("dipendente", JoinType.INNER);
+			root.fetch("ruoli", JoinType.LEFT);
+
 			if (StringUtils.isNotEmpty(example.getUsername()))
-				predicates.add(cb.like(cb.upper(root.get("username")), "%" + example.getUsername().toUpperCase() + "%"));
+				predicates
+						.add(cb.like(cb.upper(root.get("username")), "%" + example.getUsername().toUpperCase() + "%"));
+
+			if (example.getDipendente() != null && StringUtils.isNotEmpty(example.getDipendente().getNome()))
+				predicates.add(cb.like(cb.upper(root.join("dipendente", JoinType.INNER).get("nome")),
+						"%" + example.getDipendente().getNome().toUpperCase() + "%"));
+
+			if (example.getDipendente() != null && StringUtils.isNotEmpty(example.getDipendente().getCognome()))
+				predicates.add(cb.like(cb.upper(root.join("dipendente", JoinType.INNER).get("cognome")),
+						"%" + example.getDipendente().getCognome().toUpperCase() + "%"));
+
+			if (example.getDipendente() != null && StringUtils.isNotEmpty(example.getDipendente().getCodiceFiscale()))
+				predicates.add(cb.like(cb.upper(root.join("dipendente", JoinType.INNER).get("codiceFiscale")),
+						"%" + example.getDipendente().getCodiceFiscale().toUpperCase() + "%"));
 
 			if (example.getStato() != null)
 				predicates.add(cb.equal(root.get("stato"), example.getStato()));
 
-			if (example.getDateCreated() != null)
-				predicates.add(cb.greaterThanOrEqualTo(root.get("dateCreated"), example.getDateCreated()));
-			
-			if(example.getRuoli().size() >0)
+			if (example.getRuoli() != null && !example.getRuoli().isEmpty())
 				predicates.add(root.join("ruoli").in(example.getRuoli()));
-			
-			
-				//predicates.add(root.join("ruoli").in(example.getRuoli);
+
+			query.distinct(true);
 			return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 		};
 
