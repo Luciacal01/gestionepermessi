@@ -162,10 +162,11 @@ public class DipendenteDTO {
 		DipendenteDTO result = new DipendenteDTO(dipendenteModel.getId(), dipendenteModel.getNome(),
 				dipendenteModel.getCognome(), dipendenteModel.getCodiceFiscale(), dipendenteModel.getEmail(),
 				dipendenteModel.getDataNascita(), dipendenteModel.getDataAssunzione(),dipendenteModel.getSesso());
-		
+		/*
 		if(!dipendenteModel.getRichiestePermessi().isEmpty()) {
 			result.richiestaPermessiIds=dipendenteModel.getRichiestePermessi().stream().map(r->r.getId()).collect(Collectors.toList()).toArray(new Long[] {});
 		}
+		*/
 		
 		return result;
 	}

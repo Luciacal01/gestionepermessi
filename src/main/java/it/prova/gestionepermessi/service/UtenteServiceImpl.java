@@ -71,7 +71,8 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Transactional
 	public void rimuovi(Utente utenteInstance) {
-		repository.delete(utenteInstance);
+		utenteInstance.setStato(StatoUtente.DISABILITATO);
+		repository.save(utenteInstance);
 	}
 
 	@Transactional(readOnly = true)

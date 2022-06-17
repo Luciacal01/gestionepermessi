@@ -57,9 +57,11 @@ public class Dipendente {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dipendente")
 	private Set<RichiestaPermesso> richiestePermessi = new HashSet<RichiestaPermesso>(0);
-
-	public Dipendente(String nome, String cognome, String codiceFiscale, String email, Date dataNascita, Date dataAssunzione,
-			Date dataDimissioni, Sesso sesso) {
+	
+	public Dipendente() {
+	}
+	
+	public Dipendente(String nome, String cognome, String codiceFiscale, String email, Date dataNascita, Date dataAssunzione, Sesso sesso) {
 		super();
 		this.nome = nome;
 		this.cognome = cognome;
@@ -67,9 +69,22 @@ public class Dipendente {
 		this.email = email;
 		this.dataNascita = dataNascita;
 		this.dataAssunzione = dataAssunzione;
-		this.dataDimissioni = dataDimissioni;
 		this.sesso = sesso;
 	}
+	
+	
+
+	public Dipendente(String nome, String cognome, String codiceFiscale, Date dataNascita, Date dataAssunzione, Sesso sesso) {
+		super();
+		this.nome = nome;
+		this.cognome = cognome;
+		this.codiceFiscale = codiceFiscale;
+		this.dataNascita = dataNascita;
+		this.dataAssunzione = dataAssunzione;
+		this.sesso = sesso;
+	}
+
+
 
 	public Long getId() {
 		return id;
