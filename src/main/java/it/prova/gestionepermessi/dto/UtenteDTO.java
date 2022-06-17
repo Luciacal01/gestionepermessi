@@ -50,6 +50,16 @@ public class UtenteDTO {
 		this.stato = stato;
 	}
 
+	
+	
+	public UtenteDTO(Long id, String username, StatoUtente stato, Date dataCreazione) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.dateCreated = dataCreazione;
+		this.stato = stato;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -117,7 +127,7 @@ public class UtenteDTO {
 	
 	// niente password...
 	public static UtenteDTO buildUtenteDTOFromModel(Utente utenteModel) {
-		UtenteDTO result = new UtenteDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getStato());
+		UtenteDTO result = new UtenteDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getStato(), utenteModel.getDateCreated());
 
 		if (!utenteModel.getRuoli().isEmpty())
 			result.ruoliIds = utenteModel.getRuoli().stream().map(r -> r.getId()).collect(Collectors.toList())

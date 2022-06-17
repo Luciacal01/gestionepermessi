@@ -69,10 +69,6 @@ public class Utente {
 		this.stato = stato;
 	}
 
-	public Utente(Long id2, String username2, StatoUtente stato2, Date dateCreated2) {
-		// TODO Auto-generated constructor stub
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -160,6 +156,8 @@ public class Utente {
 	public void setDipendente(Dipendente dipendente) {
 		this.dipendente = dipendente;
 	}
+	
+	
 	
 	
 }
