@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Utente;
 
 public interface DipendenteService {
-	public List<Dipendente> listAllUtenti() ;
+	public List<Dipendente> listAllDipendenti() ;
 
 	public Dipendente caricaSingoloDipendente(Long id);
 
@@ -20,5 +21,5 @@ public interface DipendenteService {
 	
 	public void inserisciNuovoConUtente(Utente utenteInstance, Dipendente dipendenteInstance);
 	
-	public Page<Dipendente> findByExample(Dipendente example, Integer pageNo, Integer pageSize, String sortBy);
+	public Page<Dipendente> findByExample(DipendenteDTO example, Integer pageNo, Integer pageSize, String sortBy);
 }

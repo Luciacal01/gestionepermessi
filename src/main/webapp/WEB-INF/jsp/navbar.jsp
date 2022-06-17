@@ -28,25 +28,25 @@
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Utenze</a>
 		        <div class="dropdown-menu" aria-labelledby="dropdown01">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/utente/">Lista utente</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/utente/search">Ricerca Utenti</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/">Lista utente</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/search">Ricerca Utenti</a>
 		        </div>
 		      </li>
+		      
+		      <li class="nav-item">
+            		<a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/admin/searchDipendente">Ricerca Richieste Permesso</a>
+          	  </li>
 		   </sec:authorize>
 		   
 		   <sec:authorize access="hasRole('BO_USER')">
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Utenze</a>
 		        <div class="dropdown-menu" aria-labelledby="dropdown01">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/dipendente/">Lista dipendenti</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/dipendente/insert">Inserisci dipendente</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/dipendente/search">Ricerca Dipendente</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/backoffice/listDipendenti">Lista dipendenti</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/backoffice/insertDipendente">Inserisci dipendente</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/backoffice/searchDipendente">Ricerca Dipendente</a>
 		        </div>
 		      </li>
-		      
-		      <li class="nav-item">
-            		<a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/richiestapermesso/search">Ricerca Richieste Permesso</a>
-          	  </li>
 		      
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Messaggi</a>

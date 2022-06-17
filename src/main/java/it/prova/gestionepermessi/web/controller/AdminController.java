@@ -20,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RuoloDTO;
 import it.prova.gestionepermessi.dto.UtenteDTO;
 import it.prova.gestionepermessi.dto.UtenteSearchDTO;
+import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Utente;
+import it.prova.gestionepermessi.service.DipendenteService;
 import it.prova.gestionepermessi.service.RuoloService;
 import it.prova.gestionepermessi.service.UtenteService;
 
@@ -36,6 +39,9 @@ public class AdminController {
 	
 	@Autowired
 	private RuoloService ruoloService;
+	
+	@Autowired
+	private DipendenteService dipendenteService;
 	
 	@GetMapping("/listUtente")
 	public ModelAndView listAllUtenti() {
@@ -111,5 +117,37 @@ public class AdminController {
 		return "redirect:/admin/listUtente";
 	}
 	
+	@GetMapping("/listDipendenti")
+	public ModelAndView listAllDipendenti() {
+		ModelAndView mv = new ModelAndView();
+		List<Dipendente> dipendenti = dipendenteService.listAllDipendenti();
+		mv.addObject("dipendente_list_attribute", DipendenteDTO.createDipendenteDTOListFromModelList(dipendenti));
+		mv.setViewName("admin/listdipendente");
+		return mv;
+	}
 	
+	@GetMapping("/showdipendente/{idDipendente}")
+	public String showDipendente(@PathVariable(required = true) Long idDipendente, Model model) {
+		model.addAttribute("show_dipendente_attr", dipendenteService.caricaSingoloDipendente(idDipendente));
+		return "admin/showdipendente";
+	}
+	
+	@GetMapping("/searchDipendente")
+	public String searchDipendente(Model model) {
+		//model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
+	
+		return "admin/searchdipendente";
+	}
+	
+	@PostMapping("/listAllDipendenti")
+	public String listDipendenti( DipendenteDTO dipendenteExample, @RequestParam(defaultValue = "0") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy,
+			ModelMap model) {
+		
+		List<Dipendente> dipendenti = dipendenteService
+				.findByExample(dipendenteExample, pageNo, pageSize, sortBy).getContent();
+
+		model.addAttribute("dipendente_list_attribute", DipendenteDTO.createDipendenteDTOListFromModelList(dipendenti));
+		return "admin/listdipendente";
+	}
 }

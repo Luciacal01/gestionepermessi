@@ -3,6 +3,8 @@ package it.prova.gestionepermessi.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 
@@ -28,9 +30,11 @@ public class DipendenteServiceImpl implements DipendenteService {
 	private UtenteRepository utenteRepository;
 	@Autowired
 	private DipendenteRepository dipendenteRepository;
-
+	@PersistenceContext
+	private EntityManager entityManager;
+	
 	@Override
-	public List<Dipendente> listAllUtenti() {
+	public List<Dipendente> listAllDipendenti() {
 		return (List<Dipendente>) dipendenteRepository.findAll();
 	}
 
@@ -63,18 +67,41 @@ public class DipendenteServiceImpl implements DipendenteService {
 
 	}
 	
-	public Page<Dipendente> findByExample(Dipendente example, Integer pageNo, Integer pageSize, String sortBy){
+	public Page<Dipendente> findByExample(DipendenteDTO example, Integer pageNo, Integer pageSize, String sortBy){
 		Specification<Dipendente> specificationCriteria = (root, query, cb) -> {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			
 			root.fetch("utente", JoinType.INNER);
-			root.fetch("richiestapermesso", JoinType.LEFT);
+			root.fetch("richiestePermessi", JoinType.LEFT);
 			
 			if(StringUtils.isNotEmpty(example.getNome()))
 				predicates.add(cb.like(cb.upper(root.get("nome")), "%"+ example.getNome().toUpperCase()+"%" ));
 			
+			if(StringUtils.isNotEmpty(example.getCognome()))
+				predicates.add(cb.like(cb.upper(root.get("cognome")), "%"+ example.getCognome().toUpperCase()+"%" ));
 			
+			if(StringUtils.isNotEmpty(example.getEmail()))
+				predicates.add(cb.like(cb.upper(root.get("email")), "%"+ example.getEmail().toUpperCase()+"%" ));
+			
+			if(StringUtils.isNotEmpty(example.getCodiceFiscale()))
+				predicates.add(cb.like(cb.upper(root.get("codiceFiscale")), "%"+ example.getCodiceFiscale().toUpperCase()+"%" ));
+			
+			if (example.getDataNascita() != null)
+				predicates.add(cb.greaterThanOrEqualTo(root.get("dataNascita"), example.getDataNascita()));
+			
+			if (example.getDataAssunzione() != null)
+				predicates.add(cb.greaterThanOrEqualTo(root.get("dataAssunzione"), example.getDataAssunzione()));
+			
+			if (example.getDataDimissioni() != null)
+				predicates.add(cb.greaterThanOrEqualTo(root.get("dataDimissioni"), example.getDataDimissioni()));
+			
+			if (example.getSesso() != null)
+				predicates.add(cb.equal(root.get("sesso"), example.getSesso()));
+			
+			//Da modificare
+			
+			query.distinct(true);
 			return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 		};
 

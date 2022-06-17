@@ -1,6 +1,8 @@
 package it.prova.gestionepermessi.dto;
 
-import java.util.Date;import java.util.stream.Collector;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
@@ -9,6 +11,7 @@ import javax.validation.constraints.Size;
 
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Sesso;
+
 
 public class DipendenteDTO {
 
@@ -162,13 +165,20 @@ public class DipendenteDTO {
 		DipendenteDTO result = new DipendenteDTO(dipendenteModel.getId(), dipendenteModel.getNome(),
 				dipendenteModel.getCognome(), dipendenteModel.getCodiceFiscale(), dipendenteModel.getEmail(),
 				dipendenteModel.getDataNascita(), dipendenteModel.getDataAssunzione(),dipendenteModel.getSesso());
+		
 		/*
-		if(!dipendenteModel.getRichiestePermessi().isEmpty()) {
-			result.richiestaPermessiIds=dipendenteModel.getRichiestePermessi().stream().map(r->r.getId()).collect(Collectors.toList()).toArray(new Long[] {});
-		}
+			if(!dipendenteModel.getRichiestePermessi().isEmpty()) {
+				result.richiestaPermessiIds=dipendenteModel.getRichiestePermessi().stream().map(r->r.getId()).collect(Collectors.toList()).toArray(new Long[] {});
+			}
 		*/
 		
 		return result;
+	}
+	
+	public static List<DipendenteDTO> createDipendenteDTOListFromModelList(List<Dipendente> modelListInput) {
+		return modelListInput.stream().map(utenteEntity -> {
+			return DipendenteDTO.buildDipendenteFromModel(utenteEntity);
+		}).collect(Collectors.toList());
 	}
 
 }

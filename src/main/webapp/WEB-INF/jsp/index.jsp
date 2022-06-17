@@ -55,7 +55,7 @@
 				        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. </p>
 				       	
 				       	<sec:authorize access="hasRole('BO_USER')">
-				        	<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/dipendente/search">Ricerca dipendente</a>
+				        	<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/backoffice/searchdipendente">Ricerca dipendente</a>
 				       		<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/richiestapermesso/search">Ricerca richieste permessi</a>
 				       		<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/messaggio/search">Ricerca messaggi</a>
 				       	</sec:authorize>
@@ -89,7 +89,7 @@
 			        </div>
 			        <h2>Ricerca dipendente</h2>
 			        <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-			        <a href="${pageContext.request.contextPath}/dipendente/search" class="icon-link">
+			        <a href="${pageContext.request.contextPath}/admin/listDipendenti" class="icon-link">
 			          Vai alla funzionalità
 			          <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
 			        </a>

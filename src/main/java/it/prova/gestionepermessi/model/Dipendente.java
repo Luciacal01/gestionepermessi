@@ -55,8 +55,8 @@ public class Dipendente {
 	@JoinColumn(name="utente_id", referencedColumnName = "id")
 	private Utente utente;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dipendente")
-	private Set<RichiestaPermesso> richiestePermessi = new HashSet<RichiestaPermesso>(0);
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "dipendente")
+	private Set<RichiestaPermesso> richiestePermessi = new HashSet<RichiestaPermesso>();
 	
 	public Dipendente() {
 	}
@@ -167,7 +167,9 @@ public class Dipendente {
 	}
 
 	public Set<RichiestaPermesso> getRichiestePermessi() {
-		return richiestePermessi;
+		if (this.richiestePermessi.isEmpty())
+			return null;
+		return this.richiestePermessi;
 	}
 
 	public void setRichiestePermessi(Set<RichiestaPermesso> richiestePermessi) {
