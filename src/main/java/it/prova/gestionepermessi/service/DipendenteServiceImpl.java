@@ -1,6 +1,7 @@
 package it.prova.gestionepermessi.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;import it.prova.gestionepermessi.dto.DipendenteDTO;
+import it.prova.gestionepermessi.dto.UtenteDTO;
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Ruolo;
 import it.prova.gestionepermessi.model.StatoUtente;
@@ -28,6 +30,9 @@ import it.prova.gestionepermessi.repository.UtenteRepository;
 @Service
 public class DipendenteServiceImpl implements DipendenteService {
 	
+	
+	@Autowired
+	private UtenteService utenteService;
 	@Autowired
 	private UtenteRepository utenteRepository;
 	@Autowired
@@ -39,6 +44,7 @@ public class DipendenteServiceImpl implements DipendenteService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
+	
 	@Override
 	public List<Dipendente> listAllDipendenti() {
 		return (List<Dipendente>) dipendenteRepository.findAll();
@@ -48,12 +54,25 @@ public class DipendenteServiceImpl implements DipendenteService {
 	public Dipendente caricaSingoloDipendente(Long id) {
 		return dipendenteRepository.findById(id).orElse(null);
 	}
-
+ 
 	@Override
 	public void aggiorna(Dipendente dipendenteInstance) {
-		Dipendente dipendenteReloaded= dipendenteRepository.findById(dipendenteInstance.getId()).orElse(null);
+		Dipendente dipendenteReloaded= dipendenteRepository.findByIdEager(dipendenteInstance.getId()).orElse(null);
+
 		if(dipendenteReloaded==null) throw new RuntimeException("Elemento non trovato");
-		//da aggiornare
+		dipendenteReloaded.setNome(dipendenteInstance.getNome());
+		dipendenteReloaded.setCognome(dipendenteInstance.getCognome());
+		dipendenteReloaded.setCodice(dipendenteInstance.getCodiceFiscale());
+		dipendenteReloaded.setDataNascita(dipendenteInstance.getDataNascita());
+		dipendenteReloaded.setDataAssunzione(dipendenteInstance.getDataAssunzione());
+		
+		dipendenteReloaded.setSesso(dipendenteInstance.getSesso());
+		String nome=dipendenteInstance.getNome();
+		String username= nome.substring(0,1)+"."+dipendenteInstance.getCognome();
+		dipendenteReloaded.setEmail(username+ "@prova.it");
+		dipendenteReloaded.getUtente().setUsername(username);
+		
+		utenteRepository.save(dipendenteReloaded.getUtente());
 		dipendenteRepository.save(dipendenteReloaded);
 	}
 
@@ -61,6 +80,15 @@ public class DipendenteServiceImpl implements DipendenteService {
 	public void inserisciNuovo(Dipendente dipendenteInstance) {
 		String username= dipendenteInstance.getNome().substring(0)+"."+dipendenteInstance.getCognome();
 		dipendenteInstance.setEmail(username+ "@prova.it");
+		UtenteDTO utente = new UtenteDTO();
+		utente.setUsername(username);
+		utente.setPassword(passwordEncoder.encode("Password@01"));
+		utente.setStato(StatoUtente.CREATO);
+		Utente utenteModel = utente.buildUtenteModel(true);
+		//utenteModel.getRuoli().add(ruoloService.cercaPerDescrizioneECodice("Dipendente User", "ROLE_DIPENDENTE_USER"));
+		utenteModel.setDipendente(dipendenteInstance);
+		dipendenteInstance.setUtente(utenteModel);
+		utenteRepository.save(utenteModel);
 		dipendenteRepository.save(dipendenteInstance);
 	}
 
@@ -122,13 +150,26 @@ public class DipendenteServiceImpl implements DipendenteService {
 	public void inserisciNuovoConUtente(Utente utenteInstance, Dipendente dipendenteInstance) {
 		String username= dipendenteInstance.getNome().substring(0)+"."+dipendenteInstance.getCognome();
 		dipendenteInstance.setEmail(username+ "@prova.it");
-		utenteRepository.save(utenteInstance);
+		utenteInstance.setUsername(username);
+		utenteInstance.setPassword(passwordEncoder.encode("Password@01"));
+		utenteInstance.setDateCreated(new Date());
+		utenteInstance.setStato(StatoUtente.CREATO);
+		utenteInstance.getRuoli().add(ruoloRepository.findByDescrizioneAndCodice("Dipendente User", "ROLE_DIPENDENTE_USER"));
+		utenteInstance.setDipendente(dipendenteInstance);
+		dipendenteInstance.setUtente(utenteInstance);
+		utenteService.inserisciNuovoConDipendente(utenteInstance, dipendenteInstance);
 		dipendenteRepository.save(dipendenteInstance);
 	}
 
 	@Override
 	public List<Dipendente> cercaByCognomeENomeILike(String term) {
 		return dipendenteRepository.findByCognomeIgnoreCaseContainingOrNomeIgnoreCaseContainingOrderByNomeAsc(term, term);
+	}
+
+	@Override
+	public Dipendente caricaSingoloDipendenteConUtenti(Long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

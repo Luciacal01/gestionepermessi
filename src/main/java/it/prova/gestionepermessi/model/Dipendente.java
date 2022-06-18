@@ -53,11 +53,12 @@ public class Dipendente {
 	@Column(name = "datadimissioni")
 	private Date dataDimissioni;
 	
-	@Enumerated(EnumType.STRING)
 	@Column(name = "sesso")
+	@Enumerated(EnumType.STRING)
 	private Sesso sesso;
 	
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@NotNull
+	@OneToOne(optional = false)
 	@JoinColumn(name="utente_id", referencedColumnName = "id")
 	private Utente utente;
 	
@@ -104,6 +105,22 @@ public class Dipendente {
 		this.dataDimissioni = dataDimissioni;
 		this.sesso = sesso;
 		//this.utente=utenteDTO.buildUtenteModel(false);
+	}
+
+	public Dipendente(Long id, @NotBlank(message = "{nome.notBlanck}") String nome,
+			@NotBlank(message = "{cognome.notBlanck}") String cognome,
+			@NotBlank(message = "{codiceFiscale.notBlanck}") @Size(min = 16, max = 16, message = "il valore inserito '${validatedValue}' deve essere di {min} caratteri") String codiceFiscale,
+			@NotNull(message = "{dataNascita.notNull}") Date dataNascita, Date dataAssunzione, Date dataDimissioni,
+			@NotNull(message = "{sesso.notNull}") Sesso sesso, UtenteDTO utenteDTO) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.codiceFiscale = codiceFiscale;
+		this.dataNascita = dataNascita;
+		this.dataAssunzione = dataAssunzione;
+		this.dataDimissioni = dataDimissioni;
+		this.sesso = sesso;
 	}
 
 	public Long getId() {

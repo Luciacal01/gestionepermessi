@@ -40,4 +40,6 @@ public interface UtenteService {
 	public void resetPasswordService(Long idUtente);
 	
 	public Utente cercaSingoloUtenteEager(Long id);
+	
+	public void aggiorna3(Utente utenteInstance, String userName, Dipendente dipendenteInstance);
 }

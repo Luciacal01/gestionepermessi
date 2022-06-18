@@ -28,8 +28,8 @@
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Utenze</a>
 		        <div class="dropdown-menu" aria-labelledby="dropdown01">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/">Lista utente</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/search">Ricerca Utenti</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/listUtente">Lista utente</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/searchUtente">Ricerca Utenti</a>
 		        </div>
 		      </li>
 		      

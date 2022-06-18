@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Sesso;
+import it.prova.gestionepermessi.model.Utente;
 
 
 public class DipendenteDTO {
@@ -32,12 +33,11 @@ public class DipendenteDTO {
 	@NotNull(message = "{dataNascita.notNull}")
 	private Date dataNascita;
 
-	@NotNull(message = "{dataAssunzione.notNull}")
 	private Date dataAssunzione;
 
 	private Date dataDimissioni;
 
-	@NotNull(message = "{sesso.notBlanck}")
+	@NotNull(message = "{sesso.notNull}")
 	private Sesso sesso;
 
 	private UtenteDTO utenteDTO;
@@ -58,9 +58,8 @@ public class DipendenteDTO {
 	public DipendenteDTO(Long id, @NotBlank(message = "{nome.notBlanck}") String nome,
 			@NotBlank(message = "{cognome.notBlanck}") String cognome,
 			@NotBlank(message = "{codiceFiscale.notBlanck}") @Size(min = 16, max = 16, message = "il valore inserito '${validatedValue}' deve essere di {min} caratteri") String codiceFiscale,
-			String email, @NotNull(message = "{dataNascita.notNull}") Date dataNascita,
-			@NotNull(message = "{dataAssunzione.notNull}") Date dataAssunzione,
-			@NotNull(message = "{sesso.notBlanck}") Sesso sesso) {
+			String email, @NotNull(message = "{dataNascita.notNull}") Date dataNascita, Date dataAssunzione,
+			@NotNull(message = "{sesso.notNull}") Sesso sesso) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -182,6 +181,10 @@ public class DipendenteDTO {
 	
 	public Dipendente buildDipendenteModel() {
 		return new Dipendente(this.id, this.nome, this.cognome, this.codiceFiscale,this.dataNascita, this.dataAssunzione, this.dataDimissioni, this.sesso);
+	}
+	
+	public Dipendente buildDipendenteModelConUtente() {
+		return new Dipendente(this.id, this.nome, this.cognome, this.codiceFiscale,this.dataNascita, this.dataAssunzione, this.dataDimissioni, this.sesso, this.utenteDTO);
 	}
 
 }

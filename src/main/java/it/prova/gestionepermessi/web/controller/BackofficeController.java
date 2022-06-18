@@ -2,6 +2,9 @@ package it.prova.gestionepermessi.web.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -92,31 +95,18 @@ public class BackofficeController {
 		return "backoffice/insertdipendente";
 	}
 
-	// per la validazione devo usare i groups in quanto nella insert devo validare
-	// la pwd, nella edit no
 	@PostMapping("/saveDipendente")
-	public String save(
-			@Validated({ ValidationWithPassword.class,
-					ValidationNoPassword.class }) @ModelAttribute("insert_dipendente_attr") DipendenteDTO dipendenteDTO,
-			BindingResult result, Model model, RedirectAttributes redirectAttrs) {
-		UtenteDTO utente = new UtenteDTO();
+	public String saveDipendente(@Valid @ModelAttribute("insert_dipendente_attr") DipendenteDTO dipendenteDTO,
+			BindingResult result, RedirectAttributes redirectAttrs) {
 		
-		String username = dipendenteDTO.getNome().substring(0) + "." + dipendenteDTO.getCognome();
-		utente.setUsername(username);
-		utente.setPassword(passwordEncoder.encode("Password@01"));
-		utente.setStato(StatoUtente.CREATO);
-		Utente utenteModel = utente.buildUtenteModel(true);
-		utenteModel.getRuoli().add(ruoloService.cercaPerDescrizioneECodice("Dipendente User", "ROLE_DIPENDENTE_USER"));
-		Dipendente dipendenteModel = dipendenteDTO.buildDipendenteModel();
-		utenteModel.setDipendente(dipendenteModel);
-		dipendenteModel.setUtente(utenteModel);
-		/*
 		if (result.hasErrors()) {
 			return "backoffice/insertDipendente";
 		}
-		*/
+		Dipendente dipendente= dipendenteDTO.buildDipendenteModel();
+		Utente utente =new Utente();
+		utente.setDipendente(dipendente);
 	
-		dipendenteService.inserisciNuovoConUtente(utenteModel, dipendenteModel);
+		dipendenteService.inserisciNuovoConUtente(utente, dipendente);
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/backoffice/listDipendenti";
@@ -140,5 +130,34 @@ public class BackofficeController {
 		}
 
 		return new Gson().toJson(ja);
+	}
+	
+	@GetMapping("/editDipendente/{idDipendente}")
+	public String editDipendente(@PathVariable(required = true) Long idDipendente, Model model) {
+		model.addAttribute("edit_dipendente_attr",
+				DipendenteDTO.buildDipendenteFromModel(dipendenteService.caricaSingoloDipendente(idDipendente)));
+		return "backoffice/editdipendente";
+	}
+
+	@PostMapping("/updateDipendente")
+	public String updateDipendente(@Valid @ModelAttribute("edit_dipendente_attr") DipendenteDTO dipendenteDTO, BindingResult result,
+			RedirectAttributes redirectAttrs, HttpServletRequest request) {
+		
+		if (result.hasErrors()) {
+			return "backoffice/editDipendente";
+		}
+		dipendenteService.aggiorna(dipendenteDTO.buildDipendenteModel());
+
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/backoffice/listDipendenti";
+	}
+	
+	@GetMapping("/listRichiestePermesso")
+	public ModelAndView listRichiestePermesso() {
+		ModelAndView mv = new ModelAndView();
+		List<Dipendente> dipendenti = dipendenteService.listAllDipendenti();
+		mv.addObject("dipendente_list_attribute", DipendenteDTO.createDipendenteDTOListFromModelList(dipendenti));
+		mv.setViewName("backoffice/listdipendente");
+		return mv;
 	}
 }

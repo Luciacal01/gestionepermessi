@@ -117,8 +117,8 @@
 								    <spring:bind path="sesso">
 									    <select class="form-select ${status.error ? 'is-invalid' : ''}" id="sesso" name="sesso" required>
 									    	<option value="" selected> - Selezionare - </option>
-									      	<option value="MASCHIO" ${insert_regista_attr.sesso == 'MASCHIO'?'selected':''} >M</option>
-									      	<option value="FEMMINA" ${insert_regista_attr.sesso == 'FEMMINA'?'selected':''} >F</option>
+									      	<option value="MASCHIO" ${insert_dipendente_attr.sesso == 'MASCHIO'?'selected':''} >M</option>
+									      	<option value="FEMMINA" ${insert_dipendente_attr.sesso == 'FEMMINA'?'selected':''} >F</option>
 									    </select>
 								    </spring:bind>
 								    <form:errors  path="sesso" cssClass="error_field" />

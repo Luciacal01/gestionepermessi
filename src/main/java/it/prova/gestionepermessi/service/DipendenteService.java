@@ -12,6 +12,8 @@ public interface DipendenteService {
 	public List<Dipendente> listAllDipendenti() ;
 
 	public Dipendente caricaSingoloDipendente(Long id);
+	
+	public Dipendente caricaSingoloDipendenteConUtenti(Long id);
 
 	public void aggiorna(Dipendente utenteInstance);
 

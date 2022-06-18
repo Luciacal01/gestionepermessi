@@ -76,6 +76,18 @@ public class UtenteServiceImpl implements UtenteService {
 		utenteReloaded.setRuoli(utenteInstance.getRuoli());
 		repository.save(utenteReloaded);
 	}
+	
+	@Transactional
+	public void aggiorna3(Utente utenteInstance, String userName, Dipendente dipendenteInstance) {
+		//deve aggiornare solo nome, cognome, username, ruoli
+		Utente utenteReloaded = repository.findByUsername(utenteInstance.getUsername()).orElse(null);
+		if(utenteReloaded == null)
+			throw new RuntimeException("Elemento non trovato");
+		utenteReloaded.setUsername(userName);
+		utenteReloaded.setDipendente(dipendenteInstance);
+		utenteReloaded.setRuoli(utenteInstance.getRuoli());
+		repository.save(utenteReloaded);
+	}
 
 	@Transactional
 	public void inserisciNuovo(Utente utenteInstance) {
@@ -188,7 +200,6 @@ public class UtenteServiceImpl implements UtenteService {
 		return repository.findByIdEager(id).orElse(null);
 	}
 	
-
 	
 
 }
