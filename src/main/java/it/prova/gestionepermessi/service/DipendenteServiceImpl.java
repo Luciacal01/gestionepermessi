@@ -104,7 +104,7 @@ public class DipendenteServiceImpl implements DipendenteService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			
 			root.fetch("utente", JoinType.INNER);
-			root.fetch("richiestePermessi", JoinType.LEFT);
+			root.fetch("richiestePermessi", JoinType.INNER);
 			
 			if(StringUtils.isNotEmpty(example.getNome()))
 				predicates.add(cb.like(cb.upper(root.get("nome")), "%"+ example.getNome().toUpperCase()+"%" ));
@@ -166,10 +166,5 @@ public class DipendenteServiceImpl implements DipendenteService {
 		return dipendenteRepository.findByCognomeIgnoreCaseContainingOrNomeIgnoreCaseContainingOrderByNomeAsc(term, term);
 	}
 
-	@Override
-	public Dipendente caricaSingoloDipendenteConUtenti(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

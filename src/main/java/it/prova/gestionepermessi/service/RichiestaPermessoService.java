@@ -16,7 +16,7 @@ public interface RichiestaPermessoService {
 
 	public RichiestaPermesso caricaSingolaRichiesta(Long id);
 	
-	public RichiestaPermesso caricaSingolaRichiestaConDipendente(Long id);
+	//public RichiestaPermesso caricaSingolaRichiestaConDipendente(Long id);
 	
 	public Page<RichiestaPermesso> findByExample(RichiestaPermessoDTO example, Integer pageNo, Integer pageSize, String sortBy);
 }

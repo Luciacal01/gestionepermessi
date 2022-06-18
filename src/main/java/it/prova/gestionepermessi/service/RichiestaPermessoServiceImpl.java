@@ -22,7 +22,8 @@ import it.prova.gestionepermessi.repository.RichiestaPermessoRepository;
 @Service
 public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	
-	@Autowired RichiestaPermessoRepository richiestaPermessoRepository;
+	@Autowired
+	private RichiestaPermessoRepository richiestaPermessoRepository;
 	
 	@Override
 	public List<RichiestaPermesso> listAllRichieste() {
@@ -34,10 +35,10 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 		return richiestaPermessoRepository.findById(id).orElse(null);
 	}
 
-	@Override
-	public RichiestaPermesso caricaSingolaRichiestaConDipendente(Long id) {
-		return richiestaPermessoRepository.findByIdEager(id).orElse(null);
-	}
+	//@Override
+	//public RichiestaPermesso caricaSingolaRichiestaConDipendente(Long id) {
+		//return richiestaPermessoRepository.findByIdEager(id).orElse(null);
+	//}
 
 	@Override
 	public Page<RichiestaPermesso> findByExample(RichiestaPermessoDTO example, Integer pageNo, Integer pageSize,
@@ -46,34 +47,32 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			
-			root.fetch("dipendente", JoinType.LEFT);
+			root.fetch("dipendente", JoinType.INNER);
 			
-			if(StringUtils.isNotEmpty(example.getNome()))
-				predicates.add(cb.like(cb.upper(root.get("nome")), "%"+ example.getNome().toUpperCase()+"%" ));
+			if(StringUtils.isNotEmpty(example.getCodiceCertificato()))
+				predicates.add(cb.like(cb.upper(root.get("CodiceCertificato")), "%"+ example.getCodiceCertificato().toUpperCase()+"%" ));
 			
-			if(StringUtils.isNotEmpty(example.getCognome()))
-				predicates.add(cb.like(cb.upper(root.get("cognome")), "%"+ example.getCognome().toUpperCase()+"%" ));
+			if(StringUtils.isNotEmpty(example.getNote()))
+				predicates.add(cb.like(cb.upper(root.get("note")), "%"+ example.getNote().toUpperCase()+"%" ));
 			
-			if(StringUtils.isNotEmpty(example.getEmail()))
-				predicates.add(cb.like(cb.upper(root.get("email")), "%"+ example.getEmail().toUpperCase()+"%" ));
+			if(example.isApprovato() || !example.isApprovato())
+				predicates.add(cb.like(cb.upper(root.get("approvato")), "%"+ example.isApprovato() ));
 			
-			if(StringUtils.isNotEmpty(example.getCodiceFiscale()))
-				predicates.add(cb.like(cb.upper(root.get("codiceFiscale")), "%"+ example.getCodiceFiscale().toUpperCase()+"%" ));
+			if (example.getDataInizio() != null)
+				predicates.add(cb.greaterThanOrEqualTo(root.get("dataInizio"), example.getDataInizio()));
 			
-			if (example.getDataNascita() != null)
-				predicates.add(cb.greaterThanOrEqualTo(root.get("dataNascita"), example.getDataNascita()));
+			if (example.getDataFine() != null)
+				predicates.add(cb.greaterThanOrEqualTo(root.get("dataFine"), example.getDataFine()));
 			
-			if (example.getDataAssunzione() != null)
-				predicates.add(cb.greaterThanOrEqualTo(root.get("dataAssunzione"), example.getDataAssunzione()));
+			if (example.getTipoPermesso() != null)
+				predicates.add(cb.equal(root.get("tipoPermesso"), example.getTipoPermesso()));
 			
-			if (example.getDataDimissioni() != null)
-				predicates.add(cb.greaterThanOrEqualTo(root.get("dataDimissioni"), example.getDataDimissioni()));
-			
-			if (example.getSesso() != null)
-				predicates.add(cb.equal(root.get("sesso"), example.getSesso()));
-			
-			//Da modificare
-			
+			if(example.getAttachment()!= null) {
+				predicates.add(root.join("attachment").in(example.getAttachment()));
+			}
+			if(example.getDipendenteDTO()!= null) {
+				predicates.add(root.join("dipendente").in(example.getDipendenteDTO()));
+			}
 			query.distinct(true);
 			return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 		};
@@ -85,7 +84,7 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 		else
 			paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
-		return dipendenteRepository.findAll(specificationCriteria, paging);
+		return richiestaPermessoRepository.findAll(specificationCriteria, paging);
 	}
 
 }

@@ -28,13 +28,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import it.prova.gestionepermessi.dto.DipendenteDTO;
+import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
 import it.prova.gestionepermessi.dto.RuoloDTO;
 import it.prova.gestionepermessi.dto.UtenteDTO;
 import it.prova.gestionepermessi.model.Dipendente;
+import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.Ruolo;
 import it.prova.gestionepermessi.model.StatoUtente;
 import it.prova.gestionepermessi.model.Utente;
 import it.prova.gestionepermessi.service.DipendenteService;
+import it.prova.gestionepermessi.service.RichiestaPermessoService;
 import it.prova.gestionepermessi.service.RuoloService;
 import it.prova.gestionepermessi.validation.ValidationNoPassword;
 import it.prova.gestionepermessi.validation.ValidationWithPassword;
@@ -45,6 +48,9 @@ public class BackofficeController {
 
 	@Autowired
 	private DipendenteService dipendenteService;
+	
+	@Autowired
+	private RichiestaPermessoService richiestaPermessoService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -155,9 +161,9 @@ public class BackofficeController {
 	@GetMapping("/listRichiestePermesso")
 	public ModelAndView listRichiestePermesso() {
 		ModelAndView mv = new ModelAndView();
-		List<Dipendente> dipendenti = dipendenteService.listAllDipendenti();
-		mv.addObject("dipendente_list_attribute", DipendenteDTO.createDipendenteDTOListFromModelList(dipendenti));
-		mv.setViewName("backoffice/listdipendente");
+		List<RichiestaPermesso> dipendenti = richiestaPermessoService.listAllRichieste();
+		mv.addObject("richiestepermessi_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(dipendenti));
+		mv.setViewName("backoffice/listrichiestepermessi");
 		return mv;
 	}
 }
