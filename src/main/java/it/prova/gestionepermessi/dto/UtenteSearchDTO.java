@@ -2,20 +2,19 @@ package it.prova.gestionepermessi.dto;
 
 import java.util.Date;
 
-
 import it.prova.gestionepermessi.model.StatoUtente;
 
 public class UtenteSearchDTO {
 	private Long id;
-	
+
 	private String nome;
-	
+
 	private String cognome;
-	
+
 	private String username;
 
 	private String password;
-	
+
 	private String codiceFiscale;
 
 	private String confermaPassword;
@@ -41,36 +40,21 @@ public class UtenteSearchDTO {
 		this.ruoliIds = ruoliIds;
 	}
 
-	
-	
-	
 	public String getNome() {
 		return nome;
 	}
-
-
-
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-
-
-
 	public String getCognome() {
 		return cognome;
 	}
 
-
-
-
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
-
-
-
 
 	public String getCodiceFiscale() {
 		return codiceFiscale;
@@ -135,6 +119,5 @@ public class UtenteSearchDTO {
 	public void setRuoliIds(Long[] ruoliIds) {
 		this.ruoliIds = ruoliIds;
 	}
-	
-	
+
 }

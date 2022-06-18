@@ -17,6 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import it.prova.gestionepermessi.dto.UtenteDTO;
 
 @Entity
 @Table(name = "dipendente", uniqueConstraints = @UniqueConstraint(columnNames = { "utente_id" }))
@@ -49,13 +54,14 @@ public class Dipendente {
 	private Date dataDimissioni;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name = "sesso")
 	private Sesso sesso;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name="utente_id", referencedColumnName = "id")
 	private Utente utente;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "dipendente")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dipendente")
 	private Set<RichiestaPermesso> richiestePermessi = new HashSet<RichiestaPermesso>();
 	
 	public Dipendente() {
@@ -83,8 +89,22 @@ public class Dipendente {
 		this.dataAssunzione = dataAssunzione;
 		this.sesso = sesso;
 	}
+	
+	
 
-
+	public Dipendente(Long id, String nome, String cognome, String codiceFiscale, Date dataNascita,
+			Date dataAssunzione, Date dataDimissioni, Sesso sesso){//, UtenteDTO utenteDTO) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.codiceFiscale = codiceFiscale;
+		this.dataNascita = dataNascita;
+		this.dataAssunzione = dataAssunzione;
+		this.dataDimissioni = dataDimissioni;
+		this.sesso = sesso;
+		//this.utente=utenteDTO.buildUtenteModel(false);
+	}
 
 	public Long getId() {
 		return id;

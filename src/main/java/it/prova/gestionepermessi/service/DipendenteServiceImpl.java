@@ -15,12 +15,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Ruolo;
 import it.prova.gestionepermessi.model.StatoUtente;
 import it.prova.gestionepermessi.model.Utente;
 import it.prova.gestionepermessi.repository.DipendenteRepository;
+import it.prova.gestionepermessi.repository.RuoloRepository;
 import it.prova.gestionepermessi.repository.UtenteRepository;
 
 @Service
@@ -29,7 +31,11 @@ public class DipendenteServiceImpl implements DipendenteService {
 	@Autowired
 	private UtenteRepository utenteRepository;
 	@Autowired
+	private RuoloRepository ruoloRepository;
+	@Autowired
 	private DipendenteRepository dipendenteRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -54,16 +60,13 @@ public class DipendenteServiceImpl implements DipendenteService {
 	@Override
 	public void inserisciNuovo(Dipendente dipendenteInstance) {
 		String username= dipendenteInstance.getNome().substring(0)+"."+dipendenteInstance.getCognome();
-		dipendenteInstance.getUtente().setUsername(username);
-		dipendenteInstance.getUtente().setPassword("Password@01");
-		dipendenteInstance.getUtente().setStato(StatoUtente.CREATO);
 		dipendenteInstance.setEmail(username+ "@prova.it");
 		dipendenteRepository.save(dipendenteInstance);
 	}
 
 	@Override
 	public void rimuovi(Dipendente dipendenteInstance) {
-		// TODO Auto-generated method stub
+		dipendenteInstance.getUtente().setStato(StatoUtente.DISABILITATO);
 
 	}
 	
@@ -118,13 +121,14 @@ public class DipendenteServiceImpl implements DipendenteService {
 	@Override
 	public void inserisciNuovoConUtente(Utente utenteInstance, Dipendente dipendenteInstance) {
 		String username= dipendenteInstance.getNome().substring(0)+"."+dipendenteInstance.getCognome();
-		dipendenteInstance.getUtente().setUsername(username);
-		dipendenteInstance.getUtente().setPassword("Password@01");
-		//dipendenteInstance.getUtente().setRuoli(new Ruolo("Dipendente User", "ROLE_DIPENDENTE_USER"));
-		dipendenteInstance.getUtente().setStato(StatoUtente.CREATO);
 		dipendenteInstance.setEmail(username+ "@prova.it");
 		utenteRepository.save(utenteInstance);
 		dipendenteRepository.save(dipendenteInstance);
+	}
+
+	@Override
+	public List<Dipendente> cercaByCognomeENomeILike(String term) {
+		return dipendenteRepository.findByCognomeIgnoreCaseContainingOrNomeIgnoreCaseContainingOrderByNomeAsc(term, term);
 	}
 
 }

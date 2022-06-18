@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -33,12 +34,12 @@ public class Utente {
 	@Column(name = "dateCreated")
 	private Date dateCreated;
 
-	// se non uso questa annotation viene gestito come un intero
+	
 	@Enumerated(EnumType.STRING)
 	private StatoUtente stato;
 	
 	@NotNull
-	@OneToOne(mappedBy = "utente")
+	@OneToOne(mappedBy = "utente",cascade = CascadeType.ALL)
 	private Dipendente dipendente;
 
 	@ManyToMany

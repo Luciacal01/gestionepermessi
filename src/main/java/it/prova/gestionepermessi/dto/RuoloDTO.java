@@ -18,6 +18,11 @@ public class RuoloDTO {
 		this.codice = codice;
 	}
 
+	public RuoloDTO(String descrizione, String codice) {
+		this.descrizione = descrizione;
+		this.codice = codice;
+	}
+
 	public Long getId() {
 		return id;
 	}

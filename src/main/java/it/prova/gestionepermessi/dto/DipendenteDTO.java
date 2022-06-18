@@ -35,7 +35,6 @@ public class DipendenteDTO {
 	@NotNull(message = "{dataAssunzione.notNull}")
 	private Date dataAssunzione;
 
-	@NotNull(message = "{dataDimissioni.notNull}")
 	private Date dataDimissioni;
 
 	@NotNull(message = "{sesso.notBlanck}")
@@ -179,6 +178,10 @@ public class DipendenteDTO {
 		return modelListInput.stream().map(utenteEntity -> {
 			return DipendenteDTO.buildDipendenteFromModel(utenteEntity);
 		}).collect(Collectors.toList());
+	}
+	
+	public Dipendente buildDipendenteModel() {
+		return new Dipendente(this.id, this.nome, this.cognome, this.codiceFiscale,this.dataNascita, this.dataAssunzione, this.dataDimissioni, this.sesso);
 	}
 
 }

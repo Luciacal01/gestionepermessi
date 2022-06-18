@@ -24,6 +24,7 @@ public class RichiestaPermesso {
 	@Column(name = "id")
 	private Long id;
 	
+	@Column(name = "tipoPermesso")
 	@Enumerated(EnumType.STRING)
 	private TipoPermesso tipoPermesso;
 	
@@ -43,11 +44,11 @@ public class RichiestaPermesso {
 	private String note;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "dipendente_id", nullable = false)
+	@JoinColumn(name = "dipendente_id", referencedColumnName = "id")
 	private Dipendente dipendente;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "attachment_id", referencedColumnName = "id")
+	@JoinColumn(name = "attachment_id", referencedColumnName = "id",nullable = false)
 	private Attachment attachment;
 	
 	public RichiestaPermesso(TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, boolean approvato,

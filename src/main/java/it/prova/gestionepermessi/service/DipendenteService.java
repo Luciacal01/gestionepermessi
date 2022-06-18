@@ -22,4 +22,6 @@ public interface DipendenteService {
 	public void inserisciNuovoConUtente(Utente utenteInstance, Dipendente dipendenteInstance);
 	
 	public Page<Dipendente> findByExample(DipendenteDTO example, Integer pageNo, Integer pageSize, String sortBy);
+	
+	public List<Dipendente> cercaByCognomeENomeILike(String term);
 }

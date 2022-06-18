@@ -27,7 +27,7 @@ public class Attachment {
 	private String contentType;
 
 	@Lob
-	@Column(name = "payload")
+	//@Column(name = "payload")
 	private byte[] payload;
 	
 
