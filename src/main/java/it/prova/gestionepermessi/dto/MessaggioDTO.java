@@ -1,53 +1,32 @@
-package it.prova.gestionepermessi.model;
+package it.prova.gestionepermessi.dto;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import it.prova.gestionepermessi.model.Messaggio;
+import it.prova.gestionepermessi.model.RichiestaPermesso;
 
-@Entity
-@Table(name = "messaggio")
-public class Messaggio {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+public class MessaggioDTO {
 	private Long id;
 	
-	@Column(name = "testo")
 	private String testo;
 	
-	@Column(name = "oggetto")
 	private String oggetto;
 	
-	@Column(name = "letto")
 	private boolean letto;
 	
-	@Column(name = "dataInserimento")
 	private Date dataInserimento;
 	
-	@Column(name = "dataLettura")
 	private Date dataLettura;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="richiestapermesso_id", referencedColumnName = "id")
 	private RichiestaPermesso richiestaPermesso;
 
-	public Messaggio() {
+	public MessaggioDTO() {
 		super();
 	}
-	
-	
 
-	public Messaggio(Long id, String testo, String oggetto, boolean letto, Date dataInserimento, Date dataLettura,
+	public MessaggioDTO(Long id, String testo, String oggetto, boolean letto, Date dataInserimento, Date dataLettura,
 			RichiestaPermesso richiestaPermesso) {
 		super();
 		this.id = id;
@@ -57,17 +36,6 @@ public class Messaggio {
 		this.dataInserimento = dataInserimento;
 		this.dataLettura = dataLettura;
 		this.richiestaPermesso = richiestaPermesso;
-	}
-
-
-
-	public Messaggio(String testo, String oggetto, boolean letto, Date dataInserimento, Date dataLettura) {
-		super();
-		this.testo = testo;
-		this.oggetto = oggetto;
-		this.letto = letto;
-		this.dataInserimento = dataInserimento;
-		this.dataLettura = dataLettura;
 	}
 
 	public Long getId() {
@@ -126,6 +94,30 @@ public class Messaggio {
 		this.richiestaPermesso = richiestaPermesso;
 	}
 	
-	
+	public static MessaggioDTO buildRichiestaPermessoFromModel(Messaggio messaggio) {
+		MessaggioDTO result = new MessaggioDTO(messaggio.getId(),
+				messaggio.getTesto(), messaggio.getOggetto(), messaggio.isLetto(),
+				messaggio.getDataInserimento(), messaggio.getDataLettura(), messaggio.getRichiestaPermesso());
+		/*
+		 * if(includeDipendente) { if(richiestaPermesso.getDipendente()!=null) {
+		 * DipendenteDTO dipendenteDTO=
+		 * DipendenteDTO.buildDipendenteFromModel(richiestaPermesso.getDipendente());
+		 * result.setDipendenteDTO(dipendenteDTO); } }
+		 */
+
+		return result;
+	}
+
+	public static List<MessaggioDTO> createMessaggioDTOListFromModelList(
+			List<Messaggio> modelListInput) {
+		return modelListInput.stream().map(ric -> {
+			return MessaggioDTO.buildRichiestaPermessoFromModel(ric);
+		}).collect(Collectors.toList());
+	}
+
+	public Messaggio buildMessaggioModel() {
+		return new Messaggio(this.id, this.testo, this.oggetto, this.letto, this.dataInserimento,
+				this.dataLettura, this.richiestaPermesso);
+	}
 
 }

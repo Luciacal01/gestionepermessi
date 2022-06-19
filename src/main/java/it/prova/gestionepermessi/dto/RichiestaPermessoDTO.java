@@ -7,32 +7,34 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import it.prova.gestionepermessi.model.Attachment;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.TipoPermesso;
 
 public class RichiestaPermessoDTO {
-	
+
 	private Long id;
-	
+
 	@NotNull(message = "{tipoPermesso.notNull}")
 	private TipoPermesso tipoPermesso;
-	
+
 	@NotNull(message = "{dataInizio.notNull}")
 	private Date dataInizio;
-	
+
 	private Date dataFine;
-	
+
 	private boolean approvato;
-	
+
 	@NotBlank(message = "{codiceCertificato.notBlanck}")
 	private String codiceCertificato;
-	
+
 	private String note;
-	
+
 	private DipendenteDTO dipendenteDTO;
-	
-	private Attachment attachment;
+
+	private MultipartFile attachment;
 
 	public RichiestaPermessoDTO(Long id, @NotNull(message = "{tipoPermesso.notNull}") TipoPermesso tipoPermesso,
 			@NotNull(message = "{dataInizio.notNull}") Date dataInizio, Date dataFine, boolean approvato,
@@ -46,8 +48,6 @@ public class RichiestaPermessoDTO {
 		this.codiceCertificato = codiceCertificato;
 		this.note = note;
 	}
-	
-	
 
 	public RichiestaPermessoDTO() {
 	}
@@ -116,37 +116,37 @@ public class RichiestaPermessoDTO {
 		this.dipendenteDTO = dipendenteDTO;
 	}
 
-	public Attachment getAttachment() {
+	public MultipartFile getAttachment() {
 		return attachment;
 	}
 
-	public void setAttachment(Attachment attachment) {
+	public void setAttachment(MultipartFile attachment) {
 		this.attachment = attachment;
 	}
-	
+
 	public static RichiestaPermessoDTO buildRichiestaPermessoFromModel(RichiestaPermesso richiestaPermesso) {
-		RichiestaPermessoDTO result= new RichiestaPermessoDTO(richiestaPermesso.getId(), richiestaPermesso.getTipoPermesso(), richiestaPermesso.getDataInizio(), richiestaPermesso.getDataFine(), richiestaPermesso.isApprovato(), richiestaPermesso.getCodiceCertificato(), richiestaPermesso.getNote());
+		RichiestaPermessoDTO result = new RichiestaPermessoDTO(richiestaPermesso.getId(),
+				richiestaPermesso.getTipoPermesso(), richiestaPermesso.getDataInizio(), richiestaPermesso.getDataFine(),
+				richiestaPermesso.isApprovato(), richiestaPermesso.getCodiceCertificato(), richiestaPermesso.getNote());
 		/*
-		if(includeDipendente) {
-			if(richiestaPermesso.getDipendente()!=null) {
-				DipendenteDTO dipendenteDTO= DipendenteDTO.buildDipendenteFromModel(richiestaPermesso.getDipendente());
-				result.setDipendenteDTO(dipendenteDTO);
-			}
-		}
-		*/
-		
+		 * if(includeDipendente) { if(richiestaPermesso.getDipendente()!=null) {
+		 * DipendenteDTO dipendenteDTO=
+		 * DipendenteDTO.buildDipendenteFromModel(richiestaPermesso.getDipendente());
+		 * result.setDipendenteDTO(dipendenteDTO); } }
+		 */
+
 		return result;
 	}
-	
-	
-	
-	public static List<RichiestaPermessoDTO> createRichiestaPermessoDTOListFromModelList(List<RichiestaPermesso> modelListInput){
-		return modelListInput.stream().map(ric->{
+
+	public static List<RichiestaPermessoDTO> createRichiestaPermessoDTOListFromModelList(
+			List<RichiestaPermesso> modelListInput) {
+		return modelListInput.stream().map(ric -> {
 			return RichiestaPermessoDTO.buildRichiestaPermessoFromModel(ric);
 		}).collect(Collectors.toList());
 	}
-	
+
 	public RichiestaPermesso buildRichiestaPermessoModel() {
-		return new RichiestaPermesso(this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note);
+		return new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato,
+				this.codiceCertificato, this.note);
 	}
 }

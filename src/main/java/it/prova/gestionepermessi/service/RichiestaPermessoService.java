@@ -3,6 +3,7 @@ package it.prova.gestionepermessi.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.prova.gestionepermessi.dto.AttachmentDTO;
 import it.prova.gestionepermessi.dto.DipendenteDTO;
@@ -20,7 +21,9 @@ public interface RichiestaPermessoService {
 	
 	public List<RichiestaPermesso> caricaRichiesteConDipendente(Long id);
 	
-	public Page<RichiestaPermesso> findByExample(RichiestaPermessoDTO example, Integer pageNo, Integer pageSize, String sortBy);
+	public List<RichiestaPermesso> caricaRichiesteConAttachment(Long id);
 	
-	public void inserisciRichiesta(RichiestaPermesso richiestaPermesso, AttachmentDTO attachmentDTO);
+	public Page<RichiestaPermesso> findByExample(RichiestaPermessoDTO example, Integer pageNo, Integer pageSize, String sortBy);
+
+	void inserisciRichiestaConAttachment(RichiestaPermesso richiestaPermesso, MultipartFile file);
 }

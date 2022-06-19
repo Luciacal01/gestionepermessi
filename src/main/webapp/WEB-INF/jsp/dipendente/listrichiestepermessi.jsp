@@ -47,17 +47,14 @@
 			                <tbody>
 			                	<c:forEach items="${richiestepermessi_list_attribute }" var="richiestapermessoItem">
 									<tr>
-										<td>${richiestapermessoItem.nome }</td>
-										<td>${richiestapermessoItem.cognome }</td>
-										<td>${richiestapermessoItem.codiceFiscale }</td>
-										<td>${richiestapermessoItem.email }</td>
-										<td>${richiestapermessoItem.dataNascita }</td>
-										<td>${richiestapermessoItem.dataAssunzione }</td>
-										<td>${richiestapermessoItem.dataDimissioni }</td>
-										<td>${richiestapermessoItem.sesso }</td>
+										<td>${richiestapermessoItem.tipoPermesso }</td>
+										<td>${richiestapermessoItem.dataInizio }</td>
+										<td>${richiestapermessoItem.dataFine }</td>
+										<td>${richiestapermessoItem.codiceCertificato }</td>
+										<td>${richiestapermessoItem.note }</td>
 										
 										<td>
-											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/backoffice/showdipendente/${dipendenteItem.id}">Visualizza</a>
+											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/Dipendente/showRichiestaPermesso/${richiestapermessoItem.id}">Visualizza</a>
 											<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/backoffice/editDipendente/${dipendenteItem.id}">Edit</a>
 <%-- 											<a id="changeStatoLink_#_${utenteItem.id }" class="btn btn-outline-${utenteItem.isAttivo()?'danger':'success'} btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${utenteItem.isAttivo()?'Disabilita':'Abilita'}</a> --%>
 <%-- 											<a id="resetPasswordLink_#_${utenteItem.id}" class="btn btn-outline-success btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModalPassword"  >Reset Password</a> --%>

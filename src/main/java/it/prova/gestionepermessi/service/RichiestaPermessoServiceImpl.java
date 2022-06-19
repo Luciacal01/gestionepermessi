@@ -1,5 +1,6 @@
 package it.prova.gestionepermessi.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -15,10 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.prova.gestionepermessi.dto.AttachmentDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
 import it.prova.gestionepermessi.model.Attachment;
+import it.prova.gestionepermessi.model.Messaggio;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.repository.AttachmentRepository;
 import it.prova.gestionepermessi.repository.RichiestaPermessoRepository;
@@ -29,7 +32,11 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	@Autowired
 	private RichiestaPermessoRepository richiestaPermessoRepository;
 	
-	@Autowired AttachmentRepository attachmentRepository;
+	@Autowired 
+	private AttachmentRepository attachmentRepository;
+	
+	@Autowired 
+	private MessaggioService messaggioService;
 	
 	@Override
 	public List<RichiestaPermesso> listAllRichieste() {
@@ -99,20 +106,30 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	}
 
 	@Override
-	public void inserisciRichiesta(RichiestaPermesso richiestaPermesso, AttachmentDTO attachmentDTO) {
-		if(richiestaPermesso.getDataFine()==null) {
-			Calendar calendar= Calendar.getInstance();
-			calendar.setTime(richiestaPermesso.getDataInizio());
-			calendar.add(Calendar.HOUR, 24);
-			richiestaPermesso.setDataFine(calendar.getTime());
+	public void inserisciRichiestaConAttachment(RichiestaPermesso richiestaPermesso,  MultipartFile file) {
+		
+		if(file!=null) {
+			Attachment attachment= new Attachment();
+			attachment.setNomeFile(file.getOriginalFilename());
+			attachment.setContentType(file.getContentType());
+			try {
+				attachment.setpayload(file.getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			richiestaPermesso.setAttachment( attachment);
+			attachmentRepository.save(attachment);
+			richiestaPermessoRepository.save(richiestaPermesso);
 		}
 		richiestaPermessoRepository.save(richiestaPermesso);
+		messaggioService.inserisciMessaggio(new Messaggio(), richiestaPermesso);
 		
-		if(attachmentDTO!=null) {
-			Attachment attachment= new Attachment(attachmentDTO.getNomeFile(), attachmentDTO.getContentType(), attachmentDTO.getFile());
-			attachmentRepository.save(attachment);
-		}
-		
+	}
+
+	@Override
+	public List<RichiestaPermesso> caricaRichiesteConAttachment(Long id) {
+		return richiestaPermessoRepository.findAllByAttachment_id(id);
 	}
 
 }

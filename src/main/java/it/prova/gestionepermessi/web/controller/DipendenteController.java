@@ -12,8 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -49,15 +52,12 @@ public class DipendenteController {
 	
 	@GetMapping("/insertRichiesta")
 	public String create(Model model) {
-		// model.addAttribute("ruoli_totali_attr",
-		// RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 		model.addAttribute("insert_Richiestapermesso_attr", new RichiestaPermessoDTO());
 		return "dipendente/insertRichiestaPermesso";
 	}
 
 	@PostMapping("/saveRichiestaPermesso")
-	public String saveDipendente(@Valid @ModelAttribute("insert_Richiestapermesso_attr") RichiestaPermessoDTO richiestaPermessoDTO,
-			BindingResult result, RedirectAttributes redirectAttrs) {
+	public String saveRichiestaPermesso(@Valid @ModelAttribute("insert_Richiestapermesso_attr") RichiestaPermessoDTO richiestaPermessoDTO,BindingResult result, RedirectAttributes redirectAttrs) {
 		/*
 		if (result.hasErrors()) {
 			return "dipendente/insertRichiestaPermesso";
@@ -77,9 +77,15 @@ public class DipendenteController {
 
 		richiestaPermesso.setDipendente(dipendente);
 		
-		richiestaPermessoService.inserisciRichiesta(richiestaPermesso, AttachmentDTO.buildAttachmentDTOFromModel(richiestaPermessoDTO.getAttachment()));
+		richiestaPermessoService.inserisciRichiestaConAttachment(richiestaPermesso, richiestaPermessoDTO.getAttachment());
 		
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/Dipendente/listRichiestePermesso";
+	}
+	
+	@GetMapping("/showRichiestaPermesso/{idRichiestaPermesso}")
+	public String showRichiestaPermesso(@PathVariable(required = true) Long idRichiestaPermesso, Model model) {
+		model.addAttribute("show_RichiestaPermesso_attr", richiestaPermessoService.caricaSingolaRichiesta(idRichiestaPermesso));
+		return "dipendente/showrichiestapermesso";
 	}
 }

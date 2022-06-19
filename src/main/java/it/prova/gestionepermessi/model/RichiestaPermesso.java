@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "richiestapermesso")
@@ -51,9 +53,30 @@ public class RichiestaPermesso {
 	@JoinColumn(name = "attachment_id", referencedColumnName = "id",nullable = false)
 	private Attachment attachment;
 	
+	
+	
+	
+	public RichiestaPermesso() {
+		super();
+	}
+
 	public RichiestaPermesso(TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, boolean approvato,
 			String codiceCertificato, String note) {
 		super();
+		this.tipoPermesso = tipoPermesso;
+		this.dataInizio = dataInizio;
+		this.dataFine = dataFine;
+		this.approvato = approvato;
+		this.codiceCertificato = codiceCertificato;
+		this.note = note;
+	}
+	
+	
+
+	public RichiestaPermesso(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, boolean approvato,
+			String codiceCertificato, String note) {
+		super();
+		this.id = id;
 		this.tipoPermesso = tipoPermesso;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;

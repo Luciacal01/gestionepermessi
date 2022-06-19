@@ -50,6 +50,12 @@ public class Attachment {
 
 
 
+	public Attachment() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}
