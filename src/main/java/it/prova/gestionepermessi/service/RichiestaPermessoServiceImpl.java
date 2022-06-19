@@ -87,4 +87,9 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 		return richiestaPermessoRepository.findAll(specificationCriteria, paging);
 	}
 
+	@Override
+	public List<RichiestaPermesso> caricaRichiesteConDipendente(Long id) {
+		return richiestaPermessoRepository.findAllByDipendente_id(id);
+	}
+
 }

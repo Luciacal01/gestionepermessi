@@ -166,5 +166,10 @@ public class DipendenteServiceImpl implements DipendenteService {
 		return dipendenteRepository.findByCognomeIgnoreCaseContainingOrNomeIgnoreCaseContainingOrderByNomeAsc(term, term);
 	}
 
+	@Override
+	public Dipendente caricaSingoloDipendentePerUsername(String username) {
+		return dipendenteRepository.findByUsername(username).orElse(null);
+	}
 
+	
 }

@@ -61,7 +61,7 @@
 				       	</sec:authorize>
 				       	
 				       	<sec:authorize access="hasRole('DIPENDENTE_USER')">
-				        	<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/richiestapermesso/search">Ricerca richieste permessi</a>
+				        	<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/dipendente/listRichiestePermesso">Ricerca richieste permessi</a>
 				       	</sec:authorize>
 				      </div>
 			    </div>

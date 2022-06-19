@@ -21,4 +21,7 @@ public interface DipendenteRepository extends CrudRepository<Dipendente, Long> {
 	
 	@Query("from Dipendente d join fetch d.utente where d.id=?1")
 	Optional<Dipendente> findByIdEager(Long id);
+	
+	@Query("from Dipendente d join fetch d.utente u where u.username=?1")
+	Optional<Dipendente> findByUsername(String username);
 }
