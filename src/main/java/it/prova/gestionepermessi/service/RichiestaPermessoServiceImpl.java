@@ -52,10 +52,10 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 		return richiestaPermessoRepository.findById(id).orElse(null);
 	}
 
-	//@Override
-	//public RichiestaPermesso caricaSingolaRichiestaConDipendente(Long id) {
-		//return richiestaPermessoRepository.findByIdEager(id).orElse(null);
-	//}
+	@Override
+	public RichiestaPermesso caricaSingolaRichiestaConDipendente(Long id) {
+		return richiestaPermessoRepository.findByIdEager(id);
+	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -164,6 +164,12 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 		}
 		richiestaPermessoRepository.save(richiestaPermessoReloaded);
 		
+	}
+	
+	@Override
+	@Transactional
+	public void aggiorna2(RichiestaPermesso richiestaModel) {
+		richiestaPermessoRepository.save(richiestaModel);
 	}
 
 }

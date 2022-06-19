@@ -33,4 +33,8 @@ public interface RichiestaPermessoService {
 	public void rimuovi(Long idRichiestapermesso);
 	
 	public void aggiorna(Long idRichiestapermesso, MultipartFile file);
+
+	RichiestaPermesso caricaSingolaRichiestaConDipendente(Long id);
+
+	void aggiorna2(RichiestaPermesso richiestaModel);
 }

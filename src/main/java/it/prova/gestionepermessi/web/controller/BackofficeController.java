@@ -185,4 +185,14 @@ public class BackofficeController {
 		model.addAttribute("richiestapermesso_dipendente_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richiestePermessi));
 		return "backoffice/listRichiestePermessi";
 	}
+	
+	@GetMapping("/approva/{idRichiesta}")
+	public String cambiaStato(@PathVariable(required = true) Long idRichiesta, Model model) {
+		RichiestaPermesso richiestaModel = richiestaPermessoService.caricaSingolaRichiestaConDipendente(idRichiesta);
+
+		richiestaModel.setApprovato(!richiestaModel.isApprovato());
+		richiestaPermessoService.aggiorna2(richiestaModel);
+
+		return "backoffice/listRichiestePermessi";
+	}
 }
