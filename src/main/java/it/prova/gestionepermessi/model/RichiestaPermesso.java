@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Entity
 @Table(name = "richiestapermesso")
 public class RichiestaPermesso {
@@ -83,6 +85,20 @@ public class RichiestaPermesso {
 		this.approvato = approvato;
 		this.codiceCertificato = codiceCertificato;
 		this.note = note;
+	}
+	
+
+	public RichiestaPermesso(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, boolean approvato,
+			String codiceCertificato, String note, Attachment attachment) {
+		super();
+		this.id = id;
+		this.tipoPermesso = tipoPermesso;
+		this.dataInizio = dataInizio;
+		this.dataFine = dataFine;
+		this.approvato = approvato;
+		this.codiceCertificato = codiceCertificato;
+		this.note = note;
+		this.attachment = attachment;
 	}
 
 	public Long getId() {

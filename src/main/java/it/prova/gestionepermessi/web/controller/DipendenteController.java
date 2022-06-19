@@ -3,6 +3,7 @@ package it.prova.gestionepermessi.web.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,14 @@ import it.prova.gestionepermessi.dto.AttachmentDTO;
 import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoSearchDTO;
+import it.prova.gestionepermessi.dto.RuoloDTO;
+import it.prova.gestionepermessi.dto.UtenteDTO;
 import it.prova.gestionepermessi.model.Dipendente;
+import it.prova.gestionepermessi.model.Messaggio;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.Utente;
 import it.prova.gestionepermessi.service.DipendenteService;
+import it.prova.gestionepermessi.service.MessaggioService;
 import it.prova.gestionepermessi.service.RichiestaPermessoService;
 
 @Controller
@@ -41,6 +46,9 @@ public class DipendenteController {
 	
 	@Autowired
 	private RichiestaPermessoService richiestaPermessoService;
+	
+	@Autowired
+	private MessaggioService messaggioService;
 	
 	@GetMapping("/listRichiestePermesso")
 	public ModelAndView listRichiestePermesso() {
@@ -103,6 +111,62 @@ public class DipendenteController {
 				.collect(Collectors.toList());;
 		model.addAttribute("richiestepermessi_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richiestePermessi));
 		return "dipendente/listrichiestepermessi";
+	}
+	
+	@GetMapping("/deleteRichiestapermesso/{idRichiestapermesso}")
+	public String deleteRichiestapermesso(@PathVariable(required = true) Long idRichiestapermesso, Model model) {
+		model.addAttribute("delete_richiestapermesso_attr",
+				richiestaPermessoService.caricaSingolaRichiesta(idRichiestapermesso));
+
+		return "dipendente/deleteRichiestaPermesso";
+	}
+
+	@PostMapping("/removeRichiestaPermesso")
+	public String remove(@RequestParam(required = true) Long idRichiestapermesso, RedirectAttributes redirectAttrs) {
+
+		Messaggio messaggioItem = messaggioService.findByRichiesta(idRichiestapermesso);
+
+		if (messaggioItem != null) {
+			messaggioService.rimuovi(messaggioItem.getId());
+		}
+
+		richiestaPermessoService.rimuovi(idRichiestapermesso);
+
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:Dipendente/listRichiestaPermesso";
+	}
+	
+	@GetMapping("/editRichiestaPermesso/{idRichiestaPermesso}")
+	public String edit(@PathVariable(required = true) Long idRichiestaPermesso, Model model) {
+		RichiestaPermesso richiestaPermessoModel= richiestaPermessoService.caricaSingolaRichiestaConAttachment(idRichiestaPermesso);
+		model.addAttribute("edit_richiestapermesso_attr", RichiestaPermessoDTO.buildRichiestaPermessoFromModel(richiestaPermessoModel));
+		return "dipendente/updateRichiestapermesso";
+	}
+
+	@PostMapping("/updateRichiestaPermesso")
+	public String update(@Valid @ModelAttribute("edit_richiestapermesso_attr") RichiestaPermessoDTO richiestaPermessoDTO,
+			BindingResult result, Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+		
+//		if (result.hasErrors()) {
+//			return "Dipendente/editRichiestaPermesso";
+//		}
+		RichiestaPermesso richiestaPermesso=richiestaPermessoDTO.buildRichiestaPermessoModel();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth == null) {
+			throw new RuntimeException("Errore!");
+		}
+		Dipendente dipendente = dipendenteService.caricaSingoloDipendentePerUsername(auth.getName());
+		if (dipendente == null) {
+			throw new RuntimeException("Errore!");
+		}
+
+		richiestaPermesso.setDipendente(dipendente);
+		
+		richiestaPermessoService.aggiorna(richiestaPermesso.getId(), richiestaPermessoDTO.getAttachment());
+
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/Dipendente/listRichiestePermesso";
 	}
 	
 	

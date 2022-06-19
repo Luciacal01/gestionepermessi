@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.prova.gestionepermessi.dto.AttachmentDTO;
@@ -40,11 +41,13 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	private MessaggioService messaggioService;
 	
 	@Override
+	@Transactional(readOnly = true)
 	public List<RichiestaPermesso> listAllRichieste() {
 		return (List<RichiestaPermesso>) richiestaPermessoRepository.findAll();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public RichiestaPermesso caricaSingolaRichiesta(Long id) {
 		return richiestaPermessoRepository.findById(id).orElse(null);
 	}
@@ -55,6 +58,7 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	//}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<RichiestaPermesso> findByExample(RichiestaPermessoSearchDTO example, Integer pageNo, Integer pageSize,
 			String sortBy) {
 		Specification<RichiestaPermesso> specificationCriteria = (root, query, cb) -> {
@@ -94,6 +98,7 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<RichiestaPermesso> caricaRichiesteConDipendente(Long id) {
 		return richiestaPermessoRepository.findAllByDipendente_id(id);
 	}
@@ -121,8 +126,44 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<RichiestaPermesso> caricaRichiesteConAttachment(Long id) {
 		return richiestaPermessoRepository.findAllByAttachment_id(id);
+	}
+
+	@Override
+	public void rimuovi(Long idRichiestapermesso) {
+		RichiestaPermesso richiestaPermesso= richiestaPermessoRepository.findById(idRichiestapermesso).orElse(null);
+		richiestaPermessoRepository.delete(richiestaPermesso);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public RichiestaPermesso caricaSingolaRichiestaConAttachment(Long id) {
+		return richiestaPermessoRepository.findByAttachment_id(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public void aggiorna(Long idRichiestapermesso, MultipartFile file) {
+		RichiestaPermesso richiestaPermessoReloaded= richiestaPermessoRepository.findByAttachment_id(idRichiestapermesso);
+		if(file!=null) {
+			Attachment attachment= new Attachment();
+			attachment.setNomeFile(file.getOriginalFilename());
+			attachment.setContentType(file.getContentType());
+			try {
+				attachment.setpayload(file.getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			attachmentRepository.save(attachment);
+			richiestaPermessoReloaded.setAttachment( attachment);
+			richiestaPermessoRepository.save(richiestaPermessoReloaded);
+			return;
+		}
+		richiestaPermessoRepository.save(richiestaPermessoReloaded);
+		
 	}
 
 }

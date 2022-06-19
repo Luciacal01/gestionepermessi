@@ -52,6 +52,23 @@ public class RichiestaPermessoDTO {
 	public RichiestaPermessoDTO() {
 	}
 
+	
+
+	public RichiestaPermessoDTO(Long id, @NotNull(message = "{tipoPermesso.notNull}") TipoPermesso tipoPermesso,
+			@NotNull(message = "{dataInizio.notNull}") Date dataInizio, Date dataFine, boolean approvato,
+			@NotBlank(message = "{codiceCertificato.notBlanck}") String codiceCertificato, String note,
+			MultipartFile attachment) {
+		super();
+		this.id = id;
+		this.tipoPermesso = tipoPermesso;
+		this.dataInizio = dataInizio;
+		this.dataFine = dataFine;
+		this.approvato = approvato;
+		this.codiceCertificato = codiceCertificato;
+		this.note = note;
+		this.attachment = attachment;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -137,6 +154,15 @@ public class RichiestaPermessoDTO {
 
 		return result;
 	}
+	
+	public static RichiestaPermessoDTO buildRichiestaPermessoConAttachmentFromModel(RichiestaPermesso richiestaPermesso) {
+		RichiestaPermessoDTO result = new RichiestaPermessoDTO(richiestaPermesso.getId(),
+				richiestaPermesso.getTipoPermesso(), richiestaPermesso.getDataInizio(), richiestaPermesso.getDataFine(),
+				richiestaPermesso.isApprovato(), richiestaPermesso.getCodiceCertificato(), richiestaPermesso.getNote(), (MultipartFile) richiestaPermesso.getAttachment());
+		
+
+		return result;
+	}
 
 	public static List<RichiestaPermessoDTO> createRichiestaPermessoDTOListFromModelList(
 			List<RichiestaPermesso> modelListInput) {
@@ -148,5 +174,10 @@ public class RichiestaPermessoDTO {
 	public RichiestaPermesso buildRichiestaPermessoModel() {
 		return new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato,
 				this.codiceCertificato, this.note);
+	}
+	
+	public RichiestaPermesso buildRichiestaPermessoConAttachmentModel() {
+		return new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato,
+				this.codiceCertificato, this.note, (Attachment) this.attachment);
 	}
 }

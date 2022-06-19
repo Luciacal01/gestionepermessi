@@ -47,19 +47,16 @@
 			                <tbody>
 			                	<c:forEach items="${richiestepermessi_list_attribute }" var="richiestapermessoItem">
 									<tr>
-										<td>${richiestapermessoItem.nome }</td>
-										<td>${richiestapermessoItem.cognome }</td>
-										<td>${richiestapermessoItem.codiceFiscale }</td>
-										<td>${richiestapermessoItem.email }</td>
-										<td>${richiestapermessoItem.dataNascita }</td>
-										<td>${richiestapermessoItem.dataAssunzione }</td>
-										<td>${richiestapermessoItem.dataDimissioni }</td>
-										<td>${richiestapermessoItem.sesso }</td>
+										<td>${richiestapermessoItem.tipoPermesso }</td>
+										<td>${richiestapermessoItem.dataInizio }</td>
+										<td>${richiestapermessoItem.dataFine }</td>
+										<td>${richiestapermessoItem.codiceCertificato }</td>
+										<td>${richiestapermessoItem.note }</td>
 										
 										<td>
 											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/backoffice/showdipendente/${dipendenteItem.id}">Visualizza</a>
 											<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/backoffice/editDipendente/${dipendenteItem.id}">Edit</a>
-<%-- 											<a id="changeStatoLink_#_${utenteItem.id }" class="btn btn-outline-${utenteItem.isAttivo()?'danger':'success'} btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${utenteItem.isAttivo()?'Disabilita':'Abilita'}</a> --%>
+											<a id="changeStatoLink_#_${dipendenteItem.id }" class="btn btn-outline-${dipendenteItem.isAttivo()?'danger':'success'} btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${dipendenteItem.isAttivo()?'Disabilita':'Abilita'}</a>
 <%-- 											<a id="resetPasswordLink_#_${utenteItem.id}" class="btn btn-outline-success btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModalPassword"  >Reset Password</a> --%>
 										</td>
 									</tr>
@@ -91,9 +88,9 @@
 	            <div class="modal-body">
 	                Continuare con l'operazione?
 	            </div>
-	            <form method="post" action="${pageContext.request.contextPath}/admin/cambiaStato" >
+	            <form method="post" action="${pageContext.request.contextPath}/backoffice/cambiaStato" >
 		            <div class="modal-footer">
-		            	<input type="hidden" name="idUtenteForChangingStato" id="idUtenteForChangingStato">
+		            	<input type="hidden" name="idDipendenteForChangingStato" id="idDipendenteForChangingStato">
 		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
 		                <input type="submit" value="Continua"  class="btn btn-primary">
 		            </div>
@@ -108,7 +105,7 @@
 			<!-- mi prendo il numero che poi sarà l'id. Il 18 è perché 'changeStatoLink_#_' è appunto lungo 18  -->
 			var callerId = $(this).attr('id').substring(18);
 			<!-- imposto nell'hidden del modal l'id da postare alla servlet -->
-			$('#idUtenteForChangingStato').val(callerId);
+			$('#idDipendenteForChangingStato').val(callerId);
 		});
 	</script>
 	

@@ -20,6 +20,8 @@ public interface RichiestaPermessoService {
 
 	public RichiestaPermesso caricaSingolaRichiesta(Long id);
 	
+	public RichiestaPermesso caricaSingolaRichiestaConAttachment(Long id);
+	
 	public List<RichiestaPermesso> caricaRichiesteConDipendente(Long id);
 	
 	public List<RichiestaPermesso> caricaRichiesteConAttachment(Long id);
@@ -27,4 +29,8 @@ public interface RichiestaPermessoService {
 	public Page<RichiestaPermesso> findByExample(RichiestaPermessoSearchDTO example, Integer pageNo, Integer pageSize, String sortBy);
 
 	void inserisciRichiestaConAttachment(RichiestaPermesso richiestaPermesso, MultipartFile file);
+
+	public void rimuovi(Long idRichiestapermesso);
+	
+	public void aggiorna(Long idRichiestapermesso, MultipartFile file);
 }

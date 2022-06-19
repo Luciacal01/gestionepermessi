@@ -161,8 +161,8 @@ public class BackofficeController {
 	@GetMapping("/listRichiestePermesso")
 	public ModelAndView listRichiestePermesso() {
 		ModelAndView mv = new ModelAndView();
-		List<RichiestaPermesso> dipendenti = richiestaPermessoService.listAllRichieste();
-		mv.addObject("richiestepermessi_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(dipendenti));
+		List<RichiestaPermesso> richiestePermessi = richiestaPermessoService.listAllRichieste();
+		mv.addObject("richiestepermessi_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richiestePermessi));
 		mv.setViewName("backoffice/listrichiestepermessi");
 		return mv;
 	}
