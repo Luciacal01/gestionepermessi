@@ -56,7 +56,7 @@
 				       	
 				       	<sec:authorize access="hasRole('BO_USER')">
 				        	<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/backoffice/searchDipendente">Ricerca dipendente</a>
-				       		<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/backoffice/listRichiestePermesso">Ricerca richieste permessi</a>
+				       		<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/backoffice/searchRichiestaPermesso">Ricerca richieste permessi</a>
 				       		<a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/messaggio/search">Ricerca messaggi</a>
 				       	</sec:authorize>
 				       	
