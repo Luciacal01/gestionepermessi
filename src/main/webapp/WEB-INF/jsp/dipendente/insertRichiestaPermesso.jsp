@@ -127,56 +127,56 @@
  								</form:form> 
 								
  								<script type="text/javascript">
-									$(document).ready(function(){
-										if($("#giornoSingolo").is(':checked')){
-											
-											$("#dataFine").attr("disabled","disabled");
-										}
-										else{
-											$("#dataFine").removeAttr("disabled");
-										}
-										
-										$("#giornoSingolo").change(function() {
-											
-											if($("#giornoSingolo").is(':checked')){
-												
-												$("#dataFine").attr("disabled","disabled");
-											}
-											else{
-												$("#dataFine").removeAttr("disabled");
-											}
-										});
-										
-									});
+							$(document).ready(function(){
+								if($("#giornoSingolo").is(':checked')){
 									
-									$(document).ready(function(){
-										if($("#tipoPermesso").val() == "MALATTIA"){
-											
-											$("#codiceCertificato").show();
-											$("#attachment").show();
-										}
-										else{
-											
-											$("#codiceCertificato").hide();
-											$("#attachment").hide();
-										}
+									$("#dataFine").attr("disabled","disabled");
+								}
+								else{
+									$("#dataFine").removeAttr("disabled");
+								}
+								
+								$("#giornoSingolo").change(function() {
+									
+									if($("#giornoSingolo").is(':checked')){
 										
-										$("#tipoPermesso").change(function() {
-											
-											if($("#tipoPermesso").val() == "MALATTIA"){
-												
-												$("#codiceCertificato").show();
-												$("#attachment").show();
-											}
-											else{
-												
-												$("#codiceCertificato").hide();
-												$("#attachment").hide();
-											}
-										});
+										$("#dataFine").attr("disabled","disabled");
+									}
+									else{
+										$("#dataFine").removeAttr("disabled");
+									}
+								});
+								
+							});
+							
+							$(document).ready(function(){
+								if($("#tipoPermesso").val() == "MALATTIA"){
+									
+									$("#codiceCertificato").show();
+									$("#attachment").show();
+								}
+								else{
+									
+									$("#codiceCertificato").hide();
+									$("#attachment").hide();
+								}
+								
+								$("#tipoPermesso").change(function() {
+									
+									if($("#tipoPermesso").val() == "MALATTIA"){
 										
-									});
-									</script>
+										$("#codiceCertificato").show();
+										$("#attachment").show();
+									}
+									else{
+										
+										$("#codiceCertificato").hide();
+										$("#attachment").hide();
+									}
+								});
+								
+							});
+							</script>
 					    
 <!--  						end card-body			     -->
  					    </div> 

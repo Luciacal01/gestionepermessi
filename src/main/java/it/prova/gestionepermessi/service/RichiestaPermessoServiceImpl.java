@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.prova.gestionepermessi.dto.AttachmentDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
+import it.prova.gestionepermessi.dto.RichiestaPermessoSearchDTO;
 import it.prova.gestionepermessi.model.Attachment;
 import it.prova.gestionepermessi.model.Messaggio;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
@@ -54,7 +55,7 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	//}
 
 	@Override
-	public Page<RichiestaPermesso> findByExample(RichiestaPermessoDTO example, Integer pageNo, Integer pageSize,
+	public Page<RichiestaPermesso> findByExample(RichiestaPermessoSearchDTO example, Integer pageNo, Integer pageSize,
 			String sortBy) {
 		Specification<RichiestaPermesso> specificationCriteria = (root, query, cb) -> {
 
@@ -65,12 +66,6 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 			if(StringUtils.isNotEmpty(example.getCodiceCertificato()))
 				predicates.add(cb.like(cb.upper(root.get("CodiceCertificato")), "%"+ example.getCodiceCertificato().toUpperCase()+"%" ));
 			
-			if(StringUtils.isNotEmpty(example.getNote()))
-				predicates.add(cb.like(cb.upper(root.get("note")), "%"+ example.getNote().toUpperCase()+"%" ));
-			
-			if(example.isApprovato() || !example.isApprovato())
-				predicates.add(cb.like(cb.upper(root.get("approvato")), "%"+ example.isApprovato() ));
-			
 			if (example.getDataInizio() != null)
 				predicates.add(cb.greaterThanOrEqualTo(root.get("dataInizio"), example.getDataInizio()));
 			
@@ -79,12 +74,10 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 			
 			if (example.getTipoPermesso() != null)
 				predicates.add(cb.equal(root.get("tipoPermesso"), example.getTipoPermesso()));
-			
-			if(example.getAttachment()!= null) {
-				predicates.add(root.join("attachment").in(example.getAttachment()));
-			}
-			if(example.getDipendenteDTO()!= null) {
-				predicates.add(root.join("dipendente").in(example.getDipendenteDTO()));
+		
+			if (example.getDipendente() != null && example.getDipendente().getId() != null) {
+				predicates.add(
+						cb.equal(root.join("dipendente").get("id"), example.getDipendente().getId()));
 			}
 			query.distinct(true);
 			return cb.and(predicates.toArray(new Predicate[predicates.size()]));

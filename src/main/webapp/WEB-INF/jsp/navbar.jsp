@@ -62,7 +62,7 @@
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Richieste permesso</a>
 		        <div class="dropdown-menu" aria-labelledby="dropdown01">
 		          <a class="dropdown-item" href="${pageContext.request.contextPath}/Dipendente/listRichiestePermesso">lista richieste permessi</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/richiestapermesso/search">Ricerca richieste permessi</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/Dipendente/searchRichiestaPermesso">Ricerca richieste permessi</a>
 		          <a class="dropdown-item" href="${pageContext.request.contextPath}/Dipendente/insertRichiesta">Inserisci richiesta permesso</a>
 		        </div>
 		      </li>

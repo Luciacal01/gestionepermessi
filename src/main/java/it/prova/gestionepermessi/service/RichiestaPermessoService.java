@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import it.prova.gestionepermessi.dto.AttachmentDTO;
 import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
+import it.prova.gestionepermessi.dto.RichiestaPermessoSearchDTO;
 import it.prova.gestionepermessi.model.Attachment;
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
@@ -23,7 +24,7 @@ public interface RichiestaPermessoService {
 	
 	public List<RichiestaPermesso> caricaRichiesteConAttachment(Long id);
 	
-	public Page<RichiestaPermesso> findByExample(RichiestaPermessoDTO example, Integer pageNo, Integer pageSize, String sortBy);
+	public Page<RichiestaPermesso> findByExample(RichiestaPermessoSearchDTO example, Integer pageNo, Integer pageSize, String sortBy);
 
 	void inserisciRichiestaConAttachment(RichiestaPermesso richiestaPermesso, MultipartFile file);
 }

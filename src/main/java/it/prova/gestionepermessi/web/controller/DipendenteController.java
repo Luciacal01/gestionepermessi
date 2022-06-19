@@ -1,6 +1,7 @@
 package it.prova.gestionepermessi.web.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -9,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.prova.gestionepermessi.dto.AttachmentDTO;
 import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
+import it.prova.gestionepermessi.dto.RichiestaPermessoSearchDTO;
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.Utente;
@@ -83,9 +86,24 @@ public class DipendenteController {
 		return "redirect:/Dipendente/listRichiestePermesso";
 	}
 	
-	@GetMapping("/showRichiestaPermesso/{idRichiestaPermesso}")
-	public String showRichiestaPermesso(@PathVariable(required = true) Long idRichiestaPermesso, Model model) {
-		model.addAttribute("show_RichiestaPermesso_attr", richiestaPermessoService.caricaSingolaRichiesta(idRichiestaPermesso));
-		return "dipendente/showrichiestapermesso";
+	@GetMapping("/searchRichiestaPermesso")
+	public String searchRichiestaPermesso(Model model) {
+		return "dipendente/searchRichiestaPermesso";
 	}
+	
+
+	@PostMapping("/listRichieste")
+	public String listRichieste( RichiestaPermessoSearchDTO richiestePermessoExample, @RequestParam(defaultValue = "0") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy,
+			ModelMap model) {
+		Authentication  utenteInPagina= SecurityContextHolder.getContext().getAuthentication();
+		Dipendente dipendente= dipendenteService.caricaSingoloDipendentePerUsername(utenteInPagina.getName());
+		Long id= dipendente.getId();
+		List<RichiestaPermesso> richiestePermessi = richiestaPermessoService.findByExample(richiestePermessoExample, pageNo, pageSize, sortBy).getContent().stream().filter(richiesta -> richiesta.getDipendente().getId() == id)
+				.collect(Collectors.toList());;
+		model.addAttribute("richiestepermessi_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richiestePermessi));
+		return "dipendente/listrichiestepermessi";
+	}
+	
+	
 }
