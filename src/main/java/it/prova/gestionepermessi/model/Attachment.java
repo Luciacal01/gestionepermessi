@@ -37,6 +37,18 @@ public class Attachment {
 		this.contentType = contentType;
 		this.payload = payload;
 	}
+	
+	
+	
+	public Attachment(Long id, String nomeFile, String contentType, byte[] payload) {
+		super();
+		this.id = id;
+		this.nomeFile = nomeFile;
+		this.contentType = contentType;
+		this.payload = payload;
+	}
+
+
 
 	public Long getId() {
 		return id;

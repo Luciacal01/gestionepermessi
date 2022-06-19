@@ -1,6 +1,7 @@
 package it.prova.gestionepermessi.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
@@ -15,8 +16,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import it.prova.gestionepermessi.dto.AttachmentDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
+import it.prova.gestionepermessi.model.Attachment;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
+import it.prova.gestionepermessi.repository.AttachmentRepository;
 import it.prova.gestionepermessi.repository.RichiestaPermessoRepository;
 
 @Service
@@ -24,6 +28,8 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	
 	@Autowired
 	private RichiestaPermessoRepository richiestaPermessoRepository;
+	
+	@Autowired AttachmentRepository attachmentRepository;
 	
 	@Override
 	public List<RichiestaPermesso> listAllRichieste() {
@@ -90,6 +96,23 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	@Override
 	public List<RichiestaPermesso> caricaRichiesteConDipendente(Long id) {
 		return richiestaPermessoRepository.findAllByDipendente_id(id);
+	}
+
+	@Override
+	public void inserisciRichiesta(RichiestaPermesso richiestaPermesso, AttachmentDTO attachmentDTO) {
+		if(richiestaPermesso.getDataFine()==null) {
+			Calendar calendar= Calendar.getInstance();
+			calendar.setTime(richiestaPermesso.getDataInizio());
+			calendar.add(Calendar.HOUR, 24);
+			richiestaPermesso.setDataFine(calendar.getTime());
+		}
+		richiestaPermessoRepository.save(richiestaPermesso);
+		
+		if(attachmentDTO!=null) {
+			Attachment attachment= new Attachment(attachmentDTO.getNomeFile(), attachmentDTO.getContentType(), attachmentDTO.getFile());
+			attachmentRepository.save(attachment);
+		}
+		
 	}
 
 }

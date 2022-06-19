@@ -46,6 +46,11 @@ public class RichiestaPermessoDTO {
 		this.codiceCertificato = codiceCertificato;
 		this.note = note;
 	}
+	
+	
+
+	public RichiestaPermessoDTO() {
+	}
 
 	public Long getId() {
 		return id;
